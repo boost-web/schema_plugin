@@ -36,9 +36,12 @@ function easy_code_embed() {
     </script> 
 	<?php
     $shortcodes = maybe_unserialize( get_option('easy_code_embed') );
+    echo '<h1>Your Shortcodes</h1>';
     $scHTML = '<div id="shortcode_html">';
     foreach ($shortcodes as $key => $sc_array) {
-        $scHTML .= '<a style="display: inline-block; padding: 5px 10px;" href="javascript:void()" class="shortcode_link" data-index="' . $key . '">' . $sc_array['title'] . '</a>';
+        $scHTML .= '<div style="display: inline-block; padding: 8px 15px; box-shadow: 1px 1px 7px #333; background: #fff; margin-right: 12px; border-radius: 5px;"><h4 style="text-align: center;">' . $sc_array['title'] . '</h4>
+        <a style="display: inline-block; padding: 5px 10px;" href="javascript:void()" class="edit_link" data-index="' . $key . '">Edit</a>
+        <a style="display: inline-block; padding: 5px 10px;" href="javascript:void()" class="delete_link" data-index="' . $key . '">Delete</a></div>';
     }
     $scHTML .= '</div>';
     echo $scHTML;
@@ -76,7 +79,7 @@ $ajax_nonce = wp_create_nonce( "ez_embed_nonce" );
                 });
                 setTimeout(function(){location.reload()}, 1000);
             });
-            $('.shortcode_link').on('click', function() {
+            $('.edit_link').on('click', function() {
                 var data = {
                     'action': 'ez_embed_get',
                     'security': '<?php echo $ajax_nonce; ?>',
@@ -89,14 +92,24 @@ $ajax_nonce = wp_create_nonce( "ez_embed_nonce" );
                     }
                 });
             });
+            $('.delete_link').on('click', function() {
+                var data = {
+                    'action': 'ez_embed_delete',
+                    'security': '<?php echo $ajax_nonce; ?>',
+                    'shortcode': $(this).attr('data-index')
+                };
+                $.post(ajaxurl, data, function (response) {
+                    $('#response').html(response);
+                });
+                $(this).parent().remove();
+            });
         });
     </script>
 <?php }
     
 add_action('wp_ajax_ez_embed_update', 'ez_embed_callback');
     
-function ez_embed_callback() {    
-    global $wpdb;
+function ez_embed_callback() {
     check_ajax_referer( 'ez_embed_nonce', 'security' );
     if (get_option('easy_code_embed')) {
         $code_embed = maybe_unserialize( get_option('easy_code_embed') );
@@ -119,8 +132,7 @@ function ez_embed_callback() {
 
 add_action('wp_ajax_ez_embed_get', 'ez_embed_get_callback');
     
-function ez_embed_get_callback() {    
-    global $wpdb;
+function ez_embed_get_callback() {
     check_ajax_referer( 'ez_embed_nonce', 'security' );
     $content = maybe_unserialize( get_option('easy_code_embed') );
     $return_array = array(
@@ -129,6 +141,17 @@ function ez_embed_get_callback() {
         'post_index' => $_POST['shortcode']
     );
     echo json_encode($return_array);
+    die();
+}
+
+add_action('wp_ajax_ez_embed_delete', 'ez_embed_delete_callback');
+    
+function ez_embed_delete_callback() {
+    check_ajax_referer( 'ez_embed_nonce', 'security' );
+    $content = maybe_unserialize( get_option('easy_code_embed') );    
+    unset($content[$_POST['shortcode']]);
+    update_option('easy_code_embed', $content);
+    echo '<h2>Your shortcode was removed!</h2>';
     die();
 }
     
