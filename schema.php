@@ -137,7 +137,7 @@ function ez_embed_get_callback() {
     $content = maybe_unserialize( get_option('easy_code_embed') );
     $return_array = array(
         'easy-embed-title' => $content[$_POST['shortcode']]['title'],
-        'easy-embed-text' => $content[$_POST['shortcode']]['content'],
+        'easy-embed-text' => stripslashes($content[$_POST['shortcode']]['content']),
         'post_index' => $_POST['shortcode']
     );
     echo json_encode($return_array);
