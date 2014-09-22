@@ -39,7 +39,7 @@ function easy_code_embed() {
     echo '<h1>Your Shortcodes</h1>';
     $scHTML = '<div id="shortcode_html">';
     foreach ($shortcodes as $key => $sc_array) {
-        $scHTML .= '<div style="display: inline-block; padding: 8px 15px; box-shadow: 1px 1px 7px #333; background: #fff; margin-right: 12px; border-radius: 5px;"><h4 style="text-align: center;">' . $sc_array['title'] . '</h4>
+        $scHTML .= '<div style="display: inline-block; padding: 8px 15px; box-shadow: 1px 1px 7px #333; background: #fff; margin-right: 12px; border-radius: 5px;"><h4 style="text-align: center;">[ez_embed title="' . $key . '"]' . '</h4>
         <a style="display: inline-block; padding: 5px 10px;" href="javascript:void()" class="edit_link" data-index="' . $key . '">Edit</a>
         <a style="display: inline-block; padding: 5px 10px;" href="javascript:void()" class="delete_link" data-index="' . $key . '">Delete</a></div>';
     }
