@@ -120,7 +120,7 @@ function ez_embed_callback() {
         $new_easy_code_embed = array(
             $_POST['post_index'] => array (
             'title' => $_POST['title'],
-            'content' => $POST ['content'],
+            'content' => $_POST['content'],
             'post_index' => $_POST['post_index']
             ),
         );
