@@ -3,7 +3,7 @@
 /**
  * Plugin Name: Easy Code Embed
  * Description: This plugin directly injects raw code into a shortcode.
- * Version: 1.0
+ * Version: 1.0.3
  * Author: Ryan Wilson & Jake Cox
  */
 
