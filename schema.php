@@ -159,5 +159,5 @@ add_shortcode( 'ez_embed', 'ez_embed_shortcode' );
 
 function ez_embed_shortcode($atts) {
     $ez_embed = maybe_unserialize( get_option('easy_code_embed') );
-    return $ez_embed[$atts['title']]['content'];
+    return stripslashes($ez_embed[$atts['title']]['content']);
 }
